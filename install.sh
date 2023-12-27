@@ -131,13 +131,13 @@ CreateCert(){
     $systemPackage -y install socat
     curl https://get.acme.sh | sh
     ~/.acme.sh/acme.sh  --register-account  -m test@$yourDomain --server zerossl
-    ~/.acme.sh/acme.sh  --issue  -d $yourDomain  --webroot /usr/share/nginx/html/
+    ~/.acme.sh/acme.sh  --issue  -d $yourDomain  --webroot /usr/share/nginx/html/ --force
     if test -s /root/.acme.sh/$yourDomain/fullchain.cer; then
         EchoG "[5]申请证书成功."
     else
         EchoR "[error]申请证书失败，开始尝试使用standalone模式申请。"
         systemctl stop nginx
-        ~/.acme.sh/acme.sh  --issue  -d $yourDomain  --standalone
+        ~/.acme.sh/acme.sh  --issue  -d $yourDomain  --standalone --force
         systemctl start nginx
         if test -s /root/.acme.sh/$yourDomain/fullchain.cer; then
             EchoG "[info]standalone模式申请证书成功."
